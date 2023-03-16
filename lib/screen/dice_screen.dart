@@ -16,6 +16,19 @@ class _DiceScreenState extends State<DiceScreen> with TickerProviderStateMixin {
     super.initState();
 
     controller = TabController(length: 2, vsync: this); //컨트롤러 초기화 length: 탭 개수
+    controller!.addListener(tabListener); //컨트롤러 호출될 때 실행할 함수 선언
+  }
+
+  tabListener() {
+    //리스너로 사용할 함수 선언
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    //dispose로 리스너 함수 없애기
+    controller!.removeListener(tabListener);
+    super.dispose();
   }
 
   @override
@@ -28,36 +41,48 @@ class _DiceScreenState extends State<DiceScreen> with TickerProviderStateMixin {
       bottomNavigationBar: renderBottomNavigation(),
     );
   }
-}
 
-List<Widget> renderTabScreen() {
-  return [
-    Container(
-      child: Center(
-        child: Text('Tab1,'),
+  List<Widget> renderTabScreen() {
+    //탭마다의 스크린 구현
+    return [
+      Container(
+        child: Center(
+          child: Text('Tab1,'),
+        ),
       ),
-    ),
-    Container(
-      child: Center(
-        child: Text('Tab2'),
+      Container(
+        child: Center(
+          child: Text('Tab2'),
+        ),
       ),
-    ),
-  ];
-}
+    ];
+  }
 
-BottomNavigationBar renderBottomNavigation() {
-  return BottomNavigationBar(items: [
-    BottomNavigationBarItem(
-      icon: Icon(
-        Icons.sports_handball_sharp,
-      ),
-      label: 'Dice',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(
-        Icons.settings,
-      ),
-      label: 'Setting',
-    ),
-  ]);
+  BottomNavigationBar renderBottomNavigation() {
+    //하단 Nav바 구현
+    return BottomNavigationBar(
+      currentIndex: controller!.index, //현재 탭에 띄워진 화면의 인덱스
+      onTap: (int index) {
+        setState(() {
+          controller!.animateTo(index);
+        });
+      },
+      items: [
+        BottomNavigationBarItem(
+          //주사위 스크린 구현
+          icon: Icon(
+            Icons.sports_handball_sharp,
+          ),
+          label: 'Dice',
+        ),
+        BottomNavigationBarItem(
+          //설정 스크린 구현
+          icon: Icon(
+            Icons.settings,
+          ),
+          label: 'Setting',
+        ),
+      ],
+    );
+  }
 }
