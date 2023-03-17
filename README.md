@@ -1,12 +1,12 @@
 # [Flutter] 흔드는 랜덤 주사위 앱 만들기
 
 
-### **완성된 **
+### 완성된 화면 UI
 
 ![https://blog.kakaocdn.net/dn/n5zRs/btr4ylFjNq8/GYt5rmdCANyRH8exC3aNm1/img.gif](https://blog.kakaocdn.net/dn/n5zRs/btr4ylFjNq8/GYt5rmdCANyRH8exC3aNm1/img.gif)
 
 
-### **TabBarView 위젯**
+## **TabBarView 위젯**
 
 **TabBarView**는 PageView와 유사한 기능을 제공하며, Tab 위젯들과 연동할 수 있는 UI를 제공한다.
 
