@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:app_shaking_dice/screen/home_screen.dart';
+import 'package:app_shaking_dice/screen/setting_screen.dart';
 import 'package:flutter/material.dart';
 
 class DiceScreen extends StatefulWidget {
@@ -10,6 +12,8 @@ class DiceScreen extends StatefulWidget {
 
 class _DiceScreenState extends State<DiceScreen> with TickerProviderStateMixin {
   TabController? controller;
+  double pickerValue = 1.0; //민감도 초기 값 설정
+  int number = 1; //주사위 숫자 변수 선언
 
   @override
   void initState() {
@@ -45,17 +49,16 @@ class _DiceScreenState extends State<DiceScreen> with TickerProviderStateMixin {
   List<Widget> renderTabScreen() {
     //탭마다의 스크린 구현
     return [
-      Container(
-        child: Center(
-          child: Text('Tab1,'),
-        ),
-      ),
-      Container(
-        child: Center(
-          child: Text('Tab2'),
-        ),
-      ),
+      HomeScreen(number: number),
+      SettingScreen(pickerValue: pickerValue, onPickerChange: onPickerChange)
     ];
+  }
+
+//Slider 변경 시 실행되는 함수
+  void onPickerChange(double val) {
+    setState(() {
+      pickerValue = val;
+    });
   }
 
   BottomNavigationBar renderBottomNavigation() {
@@ -63,6 +66,7 @@ class _DiceScreenState extends State<DiceScreen> with TickerProviderStateMixin {
     return BottomNavigationBar(
       currentIndex: controller!.index, //현재 탭에 띄워진 화면의 인덱스
       onTap: (int index) {
+        //탭 클릭할 때 실행될 함수
         setState(() {
           controller!.animateTo(index);
         });
