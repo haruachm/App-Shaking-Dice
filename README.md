@@ -16,7 +16,7 @@ TabController는 위젯이 생성될 때 한번 초기화가 되어야 하는데
 
 위의 내용을 코드로 나타내면 아래와 같다.
 
-```
+```dart
 // ignore_for_file: prefer_const_constructorsimport 'package:flutter/material.dart';
 
 class DiceScreen extends StatefulWidget {
@@ -83,7 +83,7 @@ icon 매개변수에 아이콘을 지정하고 label 매개변수에 이름을 �
 
 탭의 개수에 맞게 BottomNavigationBarItem를 선언한다.
 
-```
+```dart
 BottomNavigationBar renderBottomNavigation() {
   return BottomNavigationBar(items: [
     BottomNavigationBarItem(
@@ -106,7 +106,7 @@ BottomNavigationBar renderBottomNavigation() {
 
 현재까지의 코드
 
-```
+```dart
 // ignore_for_file: prefer_const_constructorsimport 'package:flutter/material.dart';
 
 class DiceScreen extends StatefulWidget {
@@ -191,7 +191,7 @@ BottomNavigationBar를 누를 때마다 TabBarView가 작동되도록 연동을 
 
 Listener의 등록은 위젯이 생성될 때 한번만 이루어지면 되니 initState()에서 실행한다.
 
-```
+```dart
   @override
   void initState() {
     super.initState();
@@ -205,7 +205,7 @@ Listener의 등록은 위젯이 생성될 때 한번만 이루어지면 되니 i
 
 위에서 언급한 콜백함수를 아래에 tabListener()라는 함수로 선언하는데, 해당 함수에서 setState()를 실행해 controller 속성이 변경될 때마다 build()를 재실행하도록 한다.
 
-```
+```dart
   @override
   void initState() {
     super.initState();
@@ -224,7 +224,7 @@ Listener의 등록은 위젯이 생성될 때 한번만 이루어지면 되니 i
 
 dispose() 함수를 오버라이드해서 controller에 붙은 리스너를 위젯이 삭제할 때 함께 삭제가 되도록 한다.
 
-```
+```dart
   @override
   void initState() {
     super.initState();
@@ -267,7 +267,7 @@ onTap 매개변수에는 탭이 클릭될 때마다 실행되는 함수를 정�
 
 탭을 눌렀을 때 animateTo() 함수를 사용해 자연스러운 애니메이션 효과가 들어가 자연스럽게 지정한 탭으로 TabBarView가 전환될 수 있도록 하며 괄호 안에 index 값을 넣어준다.
 
-```
+```dart
   BottomNavigationBar renderBottomNavigation() {
 //하단 Nav바 구현return BottomNavigationBar(
       currentIndex: controller!.index,//현재 탭에 띄워진 화면의 인덱스
@@ -282,7 +282,7 @@ onTap 매개변수에는 탭이 클릭될 때마다 실행되는 함수를 정�
 
 ## **dice_screen.dart 전체 코드**
 
-```
+```dart
 // ignore_for_file: prefer_const_constructorsimport 'package:flutter/material.dart';
 
 class DiceScreen extends StatefulWidget {
