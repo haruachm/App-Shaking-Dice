@@ -1,6 +1,12 @@
 # [Flutter] 흔드는 랜덤 주사위 앱 만들기
 
-### **TabBarView 위젯**
+
+### 완성된 화면 UI
+
+![https://blog.kakaocdn.net/dn/n5zRs/btr4ylFjNq8/GYt5rmdCANyRH8exC3aNm1/img.gif](https://blog.kakaocdn.net/dn/n5zRs/btr4ylFjNq8/GYt5rmdCANyRH8exC3aNm1/img.gif)
+
+
+## **TabBarView 위젯**
 
 **TabBarView**는 PageView와 유사한 기능을 제공하며, Tab 위젯들과 연동할 수 있는 UI를 제공한다.
 
@@ -369,3 +375,122 @@ class _DiceScreenState extends State<DiceScreen> with TickerProviderStateMixin {
   }
 }
 ```
+
+
+### **Slider 매개변수와 값**
+
+**min, max** : Slider의 왼쪽 끝과 오른쪽 끝으로 최대한 이동할 수 있는 값
+
+**divisions** : min과 max에 설정한 값을 divisions에 설정한 수 만큼 구간으로 나눔, 이동할 때마다 해당 구간 한칸씩 이동
+
+**value** : 현재의 값으로, 노브의 위치가 됨
+
+**onChanged** : Slider의 콜백함수를 설정, 콜백함수에서 setState()를 실행시켜 매개변수로 받은 현재값을 계속적으로 갱신함.
+
+**label : pickerValue.toString()** : Slider 움직일 때 label 형태로 상단에 표현
+
+![https://blog.kakaocdn.net/dn/xmUr6/btr4tLy2KHF/AGu5BZHrxtfRiiB9RJwNeK/img.png](https://blog.kakaocdn.net/dn/xmUr6/btr4tLy2KHF/AGu5BZHrxtfRiiB9RJwNeK/img.png)
+
+**label : pickerValue.toStringAsFixed(1)** : 소숫점 1번째 자릿수까지 label로 표현
+
+![https://blog.kakaocdn.net/dn/tnmqd/btr4tNjjQIC/QxU6NBt9c8ZjBdKneXc761/img.png](https://blog.kakaocdn.net/dn/tnmqd/btr4tNjjQIC/QxU6NBt9c8ZjBdKneXc761/img.png)
+
+---
+
+### **Slider를 작동시키기 위한 dice_screen.dart에서 SettingScreen 작성**
+
+### **변수와 함수 선언**
+
+```
+  double pickerValue = 1.0;//민감도 초기 값 설정//Slider 변경 시 실행되는 함수void onPickerChange(double val) {
+    setState(() {
+      pickerValue = val;
+    });
+  }
+```
+
+### **두 번째Tab 부분에 SettingScreen 추가**
+
+```
+  List<Widget> renderTabScreen() {
+//탭마다의 스크린 구현return [
+      HomeScreen(number: 1),
+      SettingScreen(pickerValue: pickerValue, onPickerChange: onPickerChange)
+    ];
+  }
+```
+
+### **작동 화면**
+
+![https://blog.kakaocdn.net/dn/LntmH/btr4vopy2AH/yMTN9QUoFoGi0yaMjAywA1/img.gif](https://blog.kakaocdn.net/dn/LntmH/btr4vopy2AH/yMTN9QUoFoGi0yaMjAywA1/img.gif)
+
+---
+
+## **흔들림을 감지하는 shake 플러그인 적용하기**
+
+휴대폰이 흔들릴 때마다 새로운 주사위가 나타나야 하므로, 주사위 숫자에 해당하는 부분을 변수로 다뤄야 한다.
+
+### **주사위 숫자 변수로 선언**
+
+![https://blog.kakaocdn.net/dn/9OITZ/btr4wLqZaa5/hUWS9suSjfEPg6jKyYdoK0/img.png](https://blog.kakaocdn.net/dn/9OITZ/btr4wLqZaa5/hUWS9suSjfEPg6jKyYdoK0/img.png)
+
+![https://blog.kakaocdn.net/dn/bGkQbl/btr4xKeanlv/vvkpnVKIwobZTaU1bAK8IK/img.png](https://blog.kakaocdn.net/dn/bGkQbl/btr4xKeanlv/vvkpnVKIwobZTaU1bAK8IK/img.png)
+
+### **initState()로 상태관리 - Shake 플러그인 설정**
+
+```
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TabController(length: 2, vsync: this);//컨트롤러 초기화 length: 탭 개수
+    controller!.addListener(tabListener);//컨트롤러 호출될 때 실행할 함수 선언
+
+    shakeDetector = ShakeDetector.autoStart(
+      shakeSlopTimeMS: 100,//흔들기 감지 주기(Time)
+      shakeThresholdGravity: pickerValue,//흔들기 감지 민감도 설정
+      onPhoneShake: onPhoneShake,//흔들기 감지되었을 때 실행될 함수 설정
+    );
+  }
+```
+
+- **ShakeDetector.autoStart()** : autoStart 생성자는 코드가 실행되는 순간부터 흔들기를 감지하도록 함.
+- **shakeSlopTimeMS** : 얼마나 자주 흔들기를 감지할 지 밀리초 단위를 입력한다. 한번 흔들림이 감지가 되면 설정한 시간이 지나기까지 흔들기를 감지하지 않는다.
+- **shakeThresholdGravity** : 흔들기를 감지하는 민감도 설정, 밀감도 설정 값 변수인 'pickerValue'로 설정해준다.
+- **onPhoneShake** : 휴대폰 흔들기를 감지했을 때 실행될 함수를 설정해준다.
+
+### **onPhoneShake 함수 선언 - 흔들기 감지 시 실행될 함수**
+
+- 휴대폰을 흔들 때 주사위가 무작위가 나와야 하므로 난수를 생성하는 **Random 클래스**를 사용한다.
+- 이는 **dart:math 패키지**를 import 해야 한다.
+- **Random** 클래스는 nextInt() 함수를 제공하는데, **최소 0**부터 매개변수로 **넣은 int 값을 최대**로 한다.
+    - 주사위 숫자는 1부터 6사이니 5를 최대로 하고 1을 더해서 만들어준다.
+- setState()를 통해 생성한 난수를 주사위 숫자에 해당하는 변수인 number에 넣어준다.
+
+```
+  void onPhoneShake() {
+    final rand = new Random();//무작위 숫자
+
+    setState(() {
+      number = rand.nextInt(5) + 1;//0부터 5까지에서 +1 => 1~6까지로 변경
+    });
+  }
+```
+
+### **dispose()로 상태관리 - 흔들기 감지**
+
+- 앱 실행 중지 및 삭제 시 흔들기 감지도 함께 중지가 되도록 설정한다.
+- **stopListening()** 함수를 실행하면 리스너를 제거할 수 있다.
+
+```
+  @override
+  void dispose() {
+//dispose로 리스너 함수 없애기
+    controller!.removeListener(tabListener);
+    shakeDetector!.stopListening();//앱 삭제시 흔들기 감지도 함께 중지super.dispose();
+  }
+```
+
+## **완성된 화면**
+
+![https://blog.kakaocdn.net/dn/n5zRs/btr4ylFjNq8/GYt5rmdCANyRH8exC3aNm1/img.gif](https://blog.kakaocdn.net/dn/n5zRs/btr4ylFjNq8/GYt5rmdCANyRH8exC3aNm1/img.gif)
