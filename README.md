@@ -110,7 +110,7 @@ BottomNavigationBar renderBottomNavigation() {
 
 ![https://blog.kakaocdn.net/dn/c43sfm/btr4ki906F2/KkzhCug5udH7Ej1DFktsY1/img.png](https://blog.kakaocdn.net/dn/c43sfm/btr4ki906F2/KkzhCug5udH7Ej1DFktsY1/img.png)
 
-현재까지의 코드
+중간 점검 코드
 
 ```dart
 // ignore_for_file: prefer_const_constructorsimport 'package:flutter/material.dart';
